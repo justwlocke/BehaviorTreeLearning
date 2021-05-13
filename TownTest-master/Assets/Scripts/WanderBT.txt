@@ -1,0 +1,25 @@
+tree("Root")
+	fallback
+		tree("Thirsty")
+		tree("Hungry")
+		tree("Sleep")
+		tree("Default")
+tree("Thirsty")
+	sequence
+		FindWell
+		MoveToNewDestination
+		Drink
+tree("Hungry")
+	sequence
+		FindStall
+		MoveToNewDestination
+		Eat
+tree("Sleep")
+	sequence
+		GoToBed
+		MoveToNewDestination
+		EnterHouse
+tree("Default")
+	sequence
+		SetNewRandomDestination
+		MoveToNewDestination
