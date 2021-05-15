@@ -13,11 +13,23 @@ public class FarmerPandaBT : PandaBTScripts
     public GameObject farmPlot;
 
 
+    //Basically, how many random places on the farm plot should the farmer mover to before 1 task of "Farming" is complete?
+    private int timesToCycle;
+    //The tracker for that
+    private int timesCycled = 0;
+
+
     // Start is called before the first frame update
     protected override void Start()
     {
         //Call base.Start() because we still want to get all the references it does.
         base.Start();
+
+
+        //Set the cycle times equal to what the farm is
+        timesToCycle = farmPlot.GetComponent<FarmFieldStats>().farmMaxGrowth;
+
+        //Later, if we have different crops, we'll need to reset timesToCycle when switching
     }
 
     // Update is called once per frame
@@ -49,11 +61,6 @@ public class FarmerPandaBT : PandaBTScripts
         }
     }
 
-
-    //Basically, how many random places on the farm plot should the farmer mover to before 1 task of "Farming" is complete?
-    private int timesToCycle = 5;
-    //The tracker for that
-    private int timesCycled = 0;
 
     /// <summary>
     /// Farm or food by moving to random positions on the plot
@@ -95,6 +102,9 @@ public class FarmerPandaBT : PandaBTScripts
                 SetNewRandomDestinationInFarmPlot();
                 timesCycled++;
 
+                //Tell the farm field that it's been grown
+                farmPlot.GetComponent<FarmFieldStats>().IncreaseFieldGrowth();
+
                 Debug.Log("Still Farming");
             }
             else
@@ -104,6 +114,9 @@ public class FarmerPandaBT : PandaBTScripts
                 timesCycled = 0;
                 curSpeed = maxSpeed;
                 agent.speed = curSpeed;
+
+                //Add to the farmer the food that one cycle of this field provides
+                carriedFood += farmPlot.GetComponent<FarmFieldStats>().providedFood;
 
 
                 //Also get hungrier and thirstier
