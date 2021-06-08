@@ -18,6 +18,10 @@ public class FarmerPandaBT : PandaBTScripts
     //The tracker for that
     private int timesCycled = 0;
 
+    //The waypoint of the entrance to the field
+    private Transform plotWaypoint;
+    //The location of the farmers food drop-off point. This belongs to the field they farm.
+    private GameObject foodDropoff;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -30,6 +34,12 @@ public class FarmerPandaBT : PandaBTScripts
         timesToCycle = farmPlot.GetComponent<FarmFieldStats>().farmMaxGrowth;
 
         //Later, if we have different crops, we'll need to reset timesToCycle when switching
+
+
+        //Get the transform of the plot's waypoint
+        plotWaypoint = farmPlot.transform.GetChild(0);
+        //Get the GameObject of the dropoff stall.
+        foodDropoff = farmPlot.transform.GetChild(1).gameObject;
     }
 
     // Update is called once per frame
@@ -43,7 +53,7 @@ public class FarmerPandaBT : PandaBTScripts
     /// Move to the farm plot
     /// </summary>
     [Task]
-    public void MoveToFarmPlot()
+    public void FindFarmPlot()
     {
         //This is where we'll have the "farming" sequence be broke if they're hungry, at the beginning
         if (isAgentThirsty || isAgentHungry)
@@ -53,12 +63,9 @@ public class FarmerPandaBT : PandaBTScripts
         }
 
         //Tell the agent to move to the waypoint of the farm plot
-        agent.SetDestination(farmPlot.transform.GetChild(0).position);
-        //When it gets close, move to the next task
-        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
-        {
-            Task.current.Succeed();
-        }
+        agent.SetDestination(plotWaypoint.position);
+        
+        Task.current.Succeed();
     }
 
 
@@ -170,5 +177,63 @@ public class FarmerPandaBT : PandaBTScripts
 
 
         return randomPos;
+    }
+
+
+    /// <summary>
+    /// Move to the food dropoff location
+    /// </summary>
+    [Task]
+    public void FindFoodDropOff()
+    {
+        //We're going to not break here if they just became hungry, and instead just allow them to dropoff food. This ensures it becomes avaliable to eat, should it then be the only source
+        /*
+        if (isAgentThirsty || isAgentHungry)
+        {
+            Debug.Log("I should be failing this move to farming");
+            Task.current.Fail();
+        }
+        */
+
+
+        //Instead we break if we have no food to drop-off
+        if(carriedFood <= 0)
+        {
+            ///Debug.Log("No Food to drop off");
+            Task.current.Fail();
+            return;
+        }
+
+        //Otherwise...
+
+        //Tell the agent to move to the waypoint of the food dropoff, which is nested
+        agent.SetDestination(foodDropoff.transform.GetChild(0).position);
+
+        Task.current.Succeed();
+
+    }
+
+    [Task]
+    public void DropOffFood()
+    {
+        //Drop the food off into the stall.
+        carriedFood = foodDropoff.GetComponent<FarmStall>().DepositFood(carriedFood);
+        Debug.Log("Dropped off food");
+
+        //Next task
+        Task.current.Succeed();
+    }
+
+
+
+
+    /// <summary>
+    /// Updates all stored values to use the provided plot's data.
+    /// Essentially, change the farmers assigned plot to this plot.
+    /// </summary>
+    /// <param name="newPlot">The new plot</param>
+    public void UpdateFarmPlot(GameObject newPlot)
+    {
+        throw new System.NotImplementedException();
     }
 }

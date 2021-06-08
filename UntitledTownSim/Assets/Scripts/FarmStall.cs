@@ -6,6 +6,8 @@ public class FarmStall : MonoBehaviour
 {
 
     public float storedFood = 0;
+    [Tooltip("The Max amount of food this stall can store")]
+    public float maxFood = 1000;
 
 
     /// <summary>
@@ -13,16 +15,19 @@ public class FarmStall : MonoBehaviour
     /// </summary>
     /// <param name="foodToTake">How much to take</param>
     /// <returns>If the action was sucessful</returns>
-    public bool TakeFood(float foodToTake)
+    public float TakeFood(float foodToTake)
     {
+        //If there is less food here than we want...
         if(foodToTake > storedFood)
         {
-            return false;
+            //Take all that remains
+            return storedFood;
         }
         else
         {
+            //Take the amount of food we want
             storedFood -= foodToTake;
-            return true;
+            return foodToTake;
         }
     }
 
@@ -30,9 +35,30 @@ public class FarmStall : MonoBehaviour
     /// Add food to this stall
     /// </summary>
     /// <param name="foodToAdd">How much to add</param>
-    public void DepositFood(float foodToAdd)
+    /// <returns>Any overflow food</returns>
+    public float DepositFood(float foodToAdd)
     {
-        storedFood += foodToAdd;
+        //If we would add more food that can be stored...
+        if(storedFood + foodToAdd > maxFood)
+        {
+            //Calc the overflow amount before we modify stored food
+            float overflow = maxFood - storedFood;
+            overflow = foodToAdd - overflow;
+            //Max out the food
+            storedFood = maxFood;
+
+            //Return the extra food
+            return overflow;
+        }
+        else
+        {
+            //Add all food
+            storedFood += foodToAdd;
+            //No overflow food
+            return 0;
+        }
+
+        
     }
 
 

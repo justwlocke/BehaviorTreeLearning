@@ -104,7 +104,18 @@ public class PandaBTScripts : MonoBehaviour
     {
         if (Task.isInspected) // showing in the inspector 
         {
-            Task.current.debugInfo = string.Format(curDest.ToString() + " t= {0:0.00}", Time.time);
+            
+            //If there is no current destination...
+            if (curDest == null)
+            {
+                //Don't freak out and break the agent, instead just alert us.
+                //Debug.Log("The inspected agent had no destination for a moment. This could be intentional.");
+            }
+            else
+            {
+            
+                Task.current.debugInfo = string.Format(curDest.ToString() + " t= {0:0.00}", Time.time);
+            }
         }
         if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {

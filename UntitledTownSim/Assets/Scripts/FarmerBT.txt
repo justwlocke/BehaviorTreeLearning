@@ -3,6 +3,7 @@ tree("Root")
 		tree("Thirsty")
 		tree("Hungry")
 		tree("Sleep")
+		tree("DepositFood")
 		tree("Farming")
 		tree("Default")
 tree("Thirsty")
@@ -20,9 +21,15 @@ tree("Sleep")
 		GoToBed
 		MoveToNewDestination
 		EnterHouse
+tree("DepositFood")
+	sequence
+		FindFoodDropOff
+		MoveToNewDestination
+		DropOffFood
 tree("Farming")
 	sequence
-		MoveToFarmPlot
+		FindFarmPlot
+		MoveToNewDestination
 		Farm
 tree("Default")
 	sequence
