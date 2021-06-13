@@ -228,16 +228,18 @@ public class PandaBTScripts : MonoBehaviour
                     }
                 }
             }
-            //If there isn't a Market Stall avaliable, fall back to a random destination
+            //If there isn't a Market Stall avaliable, go to the next task
             if (dest == Vector3.zero)
             {
-                SetNewRandomDestination();
+                Task.current.Fail();
+                return;
             }
 
         }
         else
         {
-            SetNewRandomDestination();
+            Task.current.Fail();
+            return;
         }
 
 
@@ -308,7 +310,7 @@ public class PandaBTScripts : MonoBehaviour
 
     /// <summary>
     /// Eat an item, which will impart the items effects on the agent.
-    /// Gonna be only "food" and reduing hunger though xD
+    /// Gonna be only "food" and reducing hunger though xD
     /// </summary>
     [Task]
     public void Eat()
@@ -338,14 +340,24 @@ public class PandaBTScripts : MonoBehaviour
     /// </summary>
     protected void UpdateAgentStatus()
     {
+        //Hunger
         if(hungerValue >= 10)
         {
             isAgentHungry = true;
         }
+        else
+        {
+            isAgentHungry = false;
+        }
 
+        //Thirst
         if(thirstValue >= 5)
         {
             isAgentThirsty = true;
+        }
+        else
+        {
+            isAgentThirsty = false;
         }
     }
 

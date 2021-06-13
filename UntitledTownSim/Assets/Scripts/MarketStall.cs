@@ -14,7 +14,7 @@ public class MarketStall : MonoBehaviour
     /// Take food from the stall
     /// </summary>
     /// <param name="foodToTake">How much to take</param>
-    /// <returns>If the action was sucessful</returns>
+    /// <returns>The amount of food that was taken</returns>
     public float TakeFood(float foodToTake)
     {
         //If there is less food here than we want...
