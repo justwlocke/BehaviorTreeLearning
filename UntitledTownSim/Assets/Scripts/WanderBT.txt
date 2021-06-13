@@ -3,6 +3,7 @@ tree("Root")
 		tree("Thirsty")
 		tree("Hungry")
 		tree("Sleep")
+		tree("TransferFood")
 		tree("Default")
 tree("Thirsty")
 	sequence
@@ -11,7 +12,7 @@ tree("Thirsty")
 		Drink
 tree("Hungry")
 	sequence
-		FindStall
+		FindMarketStallWithFood
 		MoveToNewDestination
 		Eat
 tree("Sleep")
@@ -19,6 +20,17 @@ tree("Sleep")
 		GoToBed
 		MoveToNewDestination
 		EnterHouse
+tree("TransferFood")
+	sequence
+		TransferFarmFood
+		MoveToNewDestination
+		PickupFood
+		while 
+			HasFood
+			sequence
+				FindMarketStall
+				MoveToNewDestination
+				DepositFood
 tree("Default")
 	sequence
 		SetNewRandomDestination

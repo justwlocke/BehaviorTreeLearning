@@ -26,6 +26,8 @@ public class PandaBTScripts : MonoBehaviour
     public bool isAgentHungry = false;
     [Tooltip("Not for eating! Just moving from place to place")]
     public float carriedFood = 0;
+    [Tooltip("The max amount of food this agent can carry on their person")]
+    public float maxCarriedFood = 25;
 
 
     [Header("Time-Based Details")]
@@ -188,7 +190,7 @@ public class PandaBTScripts : MonoBehaviour
     /// Find a MarketStall, which we know because it starts with MarketWaypoint
     /// </summary>
     [Task]
-    public void FindStall()
+    public void FindMarketStallWithFood()
     {
         //Debug.Log("Finding a stall");
 
@@ -209,7 +211,7 @@ public class PandaBTScripts : MonoBehaviour
                 if (waypoint.name.StartsWith("MarketWaypoint"))
                 {
                     //If the market stall we found has no food in it, give up and try the next stall
-                    if (waypoint.GetComponent<MarketStall>().CheckFoodLevels() <= 0)
+                    if (waypoint.transform.parent.gameObject.GetComponent<MarketStall>().CheckFoodLevels() <= 0)
                     {
                         //So do nothing here
                     }
@@ -315,6 +317,7 @@ public class PandaBTScripts : MonoBehaviour
         {
             Debug.Log("Current Destination is not a market stall");
             Task.current.Fail();
+            return;
         }
 
         //Get enough food to satisfy our hunger, or all the food there is
@@ -386,6 +389,167 @@ public class PandaBTScripts : MonoBehaviour
         {
             return false;
         }
+    }
+
+
+    /// <summary>
+    /// Search for a farm stall with food in it.
+    /// Start of the tree to move food from a farm stall to a market stall
+    /// </summary>
+    [Task]
+    protected void TransferFarmFood()
+    {
+
+        Vector3 dest = Vector3.zero;
+        if (waypoints.Length > 0)
+        {
+            //Check all the waypoints for an avaliable MarketStall
+            foreach (GameObject waypoint in waypoints)
+            {
+                if (waypoint.name.StartsWith("FarmStallWaypoint"))
+                {
+                    //If the farmstall we found has no food in it, give up and try the next stall
+                    if (waypoint.transform.parent.gameObject.GetComponent<FarmStall>().CheckFoodLevels() <= 0)
+                    {
+                        //So do nothing here
+                    }
+                    //if it has any food at all...
+                    else
+                    {
+                        //Perhaps reserve that food for ourself so it doesn't get taken by someone else?
+
+
+                        //Set it as the destination for pathfinding
+                        curDest = waypoint;
+                        agent.transform.LookAt(curDest.transform);
+                        dest = curDest.transform.position;
+                    }
+                }
+            }
+            //If there isn't a Farm Stall avaliable, this task failed
+            if (dest == Vector3.zero)
+            {
+                Task.current.Fail();
+                return;
+            }
+
+        }
+        else
+        {
+            Task.current.Fail();
+            return;
+        }
+
+
+        agent.SetDestination(dest);
+        Task.current.Succeed();
+    }
+
+    /// <summary>
+    /// Pickup food from the farm stall
+    /// </summary>
+    [Task]
+    protected void PickupFood()
+    {
+        //Fail if we're not at a farm stall
+        if (curDest.transform.parent.gameObject.GetComponent<FarmStall>() == null)
+        {
+            Debug.Log("Current Destination is not a farm stall");
+            Task.current.Fail();
+            return;
+        }
+
+        //Get all the food we can carry, or as much as is in the farm stall
+        carriedFood = carriedFood + curDest.transform.parent.gameObject.GetComponent<FarmStall>().TakeFood(maxCarriedFood - carriedFood);
+
+
+        //Then find the market stall to drop the food off at.
+        Task.current.Succeed();
+    }
+
+
+
+    /// <summary>
+    /// Simple bool function for the behavior tree
+    /// </summary>
+    /// <returns></returns>
+    [Task]
+    protected bool HasFood()
+    {
+        if (carriedFood > 0) return true;
+        else return false;
+    }
+
+    /// <summary>
+    /// Find a market stall
+    /// </summary>
+    [Task]
+    protected void FindMarketStall(){
+
+        Vector3 dest = Vector3.zero;
+        if (waypoints.Length > 0)
+        {
+            //Check all the waypoints for an avaliable MarketStall
+            foreach (GameObject waypoint in waypoints)
+            {
+                if (waypoint.name.StartsWith("MarketWaypoint"))
+                {
+                    //If the market stall we found is full of food, give up and try the next stall
+                    if (waypoint.transform.parent.gameObject.GetComponent<MarketStall>().CheckFoodLevels() >= waypoint.transform.parent.gameObject.GetComponent<MarketStall>().maxFood)
+                    {
+                        //So do nothing here
+                    }
+                    //if it has any room at all...
+                    else
+                    {
+                        //Perhaps reserve that space for ourself so it doesn't get taken by someone else?
+
+
+                        //Set it as the destination for pathfinding
+                        curDest = waypoint;
+                        agent.transform.LookAt(curDest.transform);
+                        dest = curDest.transform.position;
+                    }
+                }
+            }
+            //If there isn't a market Stall avaliable, this task failed
+            if (dest == Vector3.zero)
+            {
+                Task.current.Fail();
+                return;
+            }
+
+        }
+        else
+        {
+            Task.current.Fail();
+            return;
+        }
+
+
+        agent.SetDestination(dest);
+        Task.current.Succeed();
+
+    }
+
+    /// <summary>
+    /// Deposit any carried food into the market stall we just arrived at
+    /// </summary>
+    [Task]
+    protected void DepositFood()
+    {
+        //Fail if we're not at a market stall
+        if (curDest.transform.parent.gameObject.GetComponent<MarketStall>() == null)
+        {
+            Debug.Log("Current Destination is not a market stall");
+            Task.current.Fail();
+            return;
+        }
+
+        //Drop off all the food that we can, even if it's not all of it, because the tree will loop if there is more food to be dropped off.
+        carriedFood = carriedFood - curDest.transform.parent.gameObject.GetComponent<MarketStall>().DepositFood(carriedFood);
+
+        Task.current.Succeed();
     }
 
 }

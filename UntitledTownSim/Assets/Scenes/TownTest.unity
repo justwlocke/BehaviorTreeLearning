@@ -1769,6 +1769,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 393973628}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &393973630 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1607794851038060, guid: 9a519935455363d45a2fddc43a8ab660,
+    type: 3}
+  m_PrefabInstance: {fileID: 393973628}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &393973631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393973630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4304ee8532d355a408ef1cf17e13670f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storedFood: 0
+  maxFood: 1000
 --- !u!1001 &415033403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2558,6 +2578,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 603448905}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &603448907 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1607794851038060, guid: 9a519935455363d45a2fddc43a8ab660,
+    type: 3}
+  m_PrefabInstance: {fileID: 603448905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &603448908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603448907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4304ee8532d355a408ef1cf17e13670f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storedFood: 0
+  maxFood: 1000
 --- !u!1001 &605837090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3812,6 +3852,26 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 901580292}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &901580294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1607794851038060, guid: 9a519935455363d45a2fddc43a8ab660,
+    type: 3}
+  m_PrefabInstance: {fileID: 901580292}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &901580295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901580294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4304ee8532d355a408ef1cf17e13670f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  storedFood: 0
+  maxFood: 1000
 --- !u!1001 &901679609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7453,7 +7513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1967811694}
   m_Layer: 0
-  m_Name: FarmStall1Waypoint
+  m_Name: FarmStallWaypoint
   m_TagString: waypoint
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

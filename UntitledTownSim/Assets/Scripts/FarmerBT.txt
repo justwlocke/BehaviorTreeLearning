@@ -13,7 +13,7 @@ tree("Thirsty")
 		Drink
 tree("Hungry")
 	sequence
-		FindStall
+		FindMarketStallWithFood
 		MoveToNewDestination
 		Eat
 tree("Sleep")
