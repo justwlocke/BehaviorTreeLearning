@@ -39,7 +39,6 @@ public class PandaBTScripts : MonoBehaviour
     [Tooltip("Where the villager will go when they are outside of their working hours")]
     public GameObject restingLocation;
 
-
     protected virtual void Start()
     {
         //Set certain agent values
@@ -209,9 +208,22 @@ public class PandaBTScripts : MonoBehaviour
             {
                 if (waypoint.name.StartsWith("MarketWaypoint"))
                 {
-                    curDest = waypoint;
-                    agent.transform.LookAt(curDest.transform);
-                    dest = curDest.transform.position;
+                    //If the market stall we found has no food in it, give up and try the next stall
+                    if (waypoint.GetComponent<MarketStall>().CheckFoodLevels() <= 0)
+                    {
+                        //So do nothing here
+                    }
+                    //if it has any food at all...
+                    else 
+                    {
+                        //Perhaps reserve that food for ourself so it doesn't get taken by someone else?
+
+
+                        //Set it as the destination for pathfinding
+                        curDest = waypoint;
+                        agent.transform.LookAt(curDest.transform);
+                        dest = curDest.transform.position;
+                    }
                 }
             }
             //If there isn't a Market Stall avaliable, fall back to a random destination
@@ -299,9 +311,18 @@ public class PandaBTScripts : MonoBehaviour
     [Task]
     public void Eat()
     {
+        if(curDest.transform.parent.gameObject.GetComponent<MarketStall>() == null)
+        {
+            Debug.Log("Current Destination is not a market stall");
+            Task.current.Fail();
+        }
+
+        //Get enough food to satisfy our hunger, or all the food there is
+        hungerValue = hungerValue - curDest.transform.parent.gameObject.GetComponent<MarketStall>().TakeFood(hungerValue);
+
+
         //Resolve the hunger variables
-        hungerValue = 0;
-        isAgentHungry = false;
+        UpdateAgentStatus();
         //Reset the speeds to normal
         agent.speed = maxSpeed;
         curSpeed = maxSpeed;

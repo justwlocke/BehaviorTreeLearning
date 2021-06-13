@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FarmStall : MonoBehaviour
+public class MarketStall : MonoBehaviour
 {
-
     public float storedFood = 0;
     [Tooltip("The Max amount of food this stall can store")]
-    public float maxFood = 500;
+    public float maxFood = 1000;
 
 
     /// <summary>
@@ -18,7 +17,7 @@ public class FarmStall : MonoBehaviour
     public float TakeFood(float foodToTake)
     {
         //If there is less food here than we want...
-        if(foodToTake > storedFood)
+        if (foodToTake > storedFood)
         {
             //Take all that remains
             return storedFood;
@@ -39,7 +38,7 @@ public class FarmStall : MonoBehaviour
     public float DepositFood(float foodToAdd)
     {
         //If we would add more food that can be stored...
-        if(storedFood + foodToAdd > maxFood)
+        if (storedFood + foodToAdd > maxFood)
         {
             //Calc the overflow amount before we modify stored food
             float overflow = maxFood - storedFood;
@@ -58,7 +57,7 @@ public class FarmStall : MonoBehaviour
             return 0;
         }
 
-        
+
     }
 
 
