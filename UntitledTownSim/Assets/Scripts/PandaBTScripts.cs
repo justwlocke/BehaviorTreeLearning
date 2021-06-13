@@ -547,7 +547,7 @@ public class PandaBTScripts : MonoBehaviour
         }
 
         //Drop off all the food that we can, even if it's not all of it, because the tree will loop if there is more food to be dropped off.
-        carriedFood = carriedFood - curDest.transform.parent.gameObject.GetComponent<MarketStall>().DepositFood(carriedFood);
+        carriedFood = curDest.transform.parent.gameObject.GetComponent<MarketStall>().DepositFood(carriedFood);
 
         Task.current.Succeed();
     }

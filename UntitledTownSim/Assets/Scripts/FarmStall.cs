@@ -21,7 +21,9 @@ public class FarmStall : MonoBehaviour
         if(foodToTake > storedFood)
         {
             //Take all that remains
-            return storedFood;
+            float allThatRemains = storedFood;
+            storedFood = 0;
+            return allThatRemains;
         }
         else
         {

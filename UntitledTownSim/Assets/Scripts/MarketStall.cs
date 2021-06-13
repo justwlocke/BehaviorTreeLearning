@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MarketStall : MonoBehaviour
 {
+
     public float storedFood = 0;
     [Tooltip("The Max amount of food this stall can store")]
     public float maxFood = 1000;
@@ -20,7 +21,9 @@ public class MarketStall : MonoBehaviour
         if (foodToTake > storedFood)
         {
             //Take all that remains
-            return storedFood;
+            float allThatRemains = storedFood;
+            storedFood = 0;
+            return allThatRemains;
         }
         else
         {
