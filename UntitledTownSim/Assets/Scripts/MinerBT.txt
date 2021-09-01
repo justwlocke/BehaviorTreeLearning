@@ -1,0 +1,37 @@
+tree("Root")
+	fallback
+		tree("Thirsty")
+		tree("Hungry")
+		tree("Sleep")
+		tree("DepositRocks")
+		tree("Mine")
+		tree("Default")
+tree("Thirsty")
+	sequence
+		FindWell
+		MoveToNewDestination
+		Drink
+tree("Hungry")
+	sequence
+		FindMarketStallWithFood
+		MoveToNewDestination
+		Eat
+tree("Sleep")
+	sequence
+		GoToBed
+		MoveToNewDestination
+		EnterHouse
+tree("DepositRocks")
+	sequence
+		FindRockDropOff
+		MoveToNewDestination
+		DropOffRock
+tree("Mine")
+	sequence
+		FindMineEntrance
+		MoveToNewDestination
+		Mine
+tree("Default")
+	sequence
+		SetNewRandomDestination
+		MoveToNewDestination
