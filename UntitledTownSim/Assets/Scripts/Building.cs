@@ -11,7 +11,7 @@ public class Building : MonoBehaviour
     public List<GameObject> thingsInsideBuilding = new List<GameObject>();
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         
     }
