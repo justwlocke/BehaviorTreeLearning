@@ -70,7 +70,7 @@ public class FarmerPandaBT : PandaBTScripts
 
 
     /// <summary>
-    /// Farm or food by moving to random positions on the plot
+    /// Farm for food by moving to random positions on the plot
     /// </summary>
     [Task]
     public void Farm()
